@@ -16,31 +16,30 @@ class EventsRepository:
                     slug=eventInfo.get("slug"),
                     maximum_attendees=eventInfo.get("maximum_attendees")
                 )
-            
+
                 database.session.add(event)
                 database.session.commit()
-                
+
                 return eventInfo
-            
+
             except IntegrityError:
                 raise Exception("Evento já cadastrado!")
-            
+
             except Exception as exception:
                 database.session.rollback()
                 raise exception
-                
 
     def get_event_by_id(self, event_id: str) -> Events:
         with db_connection_handler as database:
             try:
                 event = (
                     database.session
-                        .query(Events)
-                        .filter(Events.id==event_id)
-                        .one()
+                    .query(Events)
+                    .filter(Events.id == event_id)
+                    .one()
                 )
-                
+
                 return event
-            
+
             except NoResultFound:
                 return None
